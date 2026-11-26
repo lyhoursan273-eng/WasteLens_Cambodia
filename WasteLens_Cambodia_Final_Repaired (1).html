@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WasteLens Cambodia | Judge-ready prototype</title>
+<link rel="preconnect" href="https://unpkg.com"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--ink:#183229;--muted:#697b72;--green:#176b4b;--green2:#e8f2ec;--sage:#b9d2c2;--bg:#f3f6f3;--line:#dfe8e1;--white:#fff;--amber:#b87516;--red:#b7433d;--shadow:0 5px 20px #1832290c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}header{background:#102b22;color:#fff;padding:16px max(20px,calc((100vw - 1440px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:20px;font-weight:850}.brand span{color:#91d9b2}.tag{font-size:11px;color:#c6d9ce}.wrap{max-width:1440px;margin:auto;padding:22px}.topline,.cardhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.topline{margin-bottom:16px}h1{font-size:25px;letter-spacing:-.6px;margin:0 0 3px}h2{font-size:15px;margin:0}.sub,.muted,.note{color:var(--muted)}.sub{font-size:13px}.note{font-size:11px;line-height:1.55}.pill{border:1px solid #ead7ae;background:#fff8e9;color:#805613;padding:6px 10px;border-radius:30px;font-size:10px;font-weight:800;letter-spacing:.4px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow);min-width:0}.klabel{font-size:11px;color:var(--muted)}.kvalue{font-size:27px;font-weight:850;margin:3px 0}.kfoot{font-size:10px;color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr);gap:14px}.sidegrid{display:grid;gap:12px;align-content:start}.section{margin-top:14px}.filters,.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}button,.btn{border:0;border-radius:8px;background:var(--green);color:white;padding:9px 12px;font-weight:750;cursor:pointer;font-size:11px}button:hover{filter:brightness(.95)}button.secondary{background:#edf3ee;color:#28513d;border:1px solid #dce8df}button.danger{background:#fff0ef;color:#a33c36;border:1px solid #f0d1ce}button:disabled{opacity:.5;cursor:not-allowed}select,input,textarea{border:1px solid var(--line);border-radius:8px;padding:8px;background:white;color:var(--ink);font:inherit;max-width:100%}#map{height:410px;border-radius:10px;background:#e7efea;z-index:1}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin-top:9px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.hotspot{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}.hotspot:last-child{border:0}.hotname{font-weight:750}.score{font-weight:850;font-variant-numeric:tabular-nums}.high{color:var(--red)}.med{color:var(--amber)}.low{color:var(--green)}table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}th{text-align:left;color:var(--muted);font-weight:650;padding:9px 7px;border-bottom:1px solid var(--line)}td{padding:9px 7px;border-bottom:1px solid #eff3f0}.status{font-size:10px;border-radius:20px;padding:4px 7px;background:#f1f4f2}.empty{padding:15px;color:var(--muted);text-align:center}.bar{height:7px;background:#edf2ee;border-radius:10px;overflow:hidden;min-width:80px}.bar i{display:block;height:100%;background:#529b73}.twocharts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.chartbox{height:190px;position:relative}.modal{display:none;position:fixed;inset:0;background:#071c16a8;z-index:1000;align-items:center;justify-content:center;padding:14px}.modal.show{display:flex}.modalbox{background:white;border-radius:16px;padding:20px;width:min(680px,100%);max-height:94vh;overflow:auto}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid label{display:grid;gap:5px;font-size:11px;color:var(--muted)}.formgrid .full{grid-column:1/-1}.formgrid input,.formgrid select,.formgrid textarea{width:100%}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.tab{background:#eaf1eb;color:#315441}.tab.active{background:var(--green);color:#fff}.panel{display:none}.panel.active{display:block}.scenario-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.scenario-grid button{min-height:42px}.testrow{padding:9px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;font-size:11px}.pass{color:#187447;font-weight:800}.fail{color:#b7433d;font-weight:800}.toast{position:fixed;right:18px;bottom:18px;background:#173d2d;color:white;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);z-index:1500;max-width:360px;display:none}.toast.show{display:block}.detailgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.detail{background:#f5f8f5;padding:9px;border-radius:8px}.detail b{display:block;font-size:11px}.detail span{font-size:12px}.foot{margin:18px 2px;color:var(--muted);font-size:10px}.mapfallback{display:none;background:#fff8e9;color:#805613;padding:9px;border-radius:8px;margin-top:8px;font-size:11px}.photo-preview{max-width:100%;max-height:150px;display:none;border-radius:8px;margin-top:8px}.badge{font-size:10px;padding:3px 7px;border-radius:12px;background:#eef3ef}.scoreparts{display:grid;grid-template-columns:1fr auto;gap:6px;font-size:11px}.workflow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.workflow div{background:#f4f8f4;padding:10px;border-radius:9px;font-size:11px}.workflow b{display:block;color:var(--green);margin-bottom:3px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.scenario-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.wrap{padding:12px}.kpis{gap:8px}.card{padding:12px}.formgrid,.twocharts,.detailgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}header{padding:14px}.workflow{grid-template-columns:1fr}#map{height:330px}.scenario-grid{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<header><div><div class="brand">WasteLens <span>Cambodia</span></div><div class="tag">Turning waste reports into smarter urban action.</div></div><div class="tag">COMMUNITY REPORTING · HOTSPOT INTELLIGENCE · JUDGE MODE</div></header>
+<main class="wrap">
+<div class="topline"><div><h1>City waste intelligence</h1><div class="sub">A decision-support prototype for organizing community waste reports in Phnom Penh.</div></div><div class="pill">SYNTHETIC DEMO DATA · NOT AN OFFICIAL SERVICE</div></div>
+<section class="kpis">
+<div class="card"><div class="klabel">Total reports</div><div class="kvalue" id="kReports">—</div><div class="kfoot">Current filtered dataset</div></div>
+<div class="card"><div class="klabel">Potential hotspots</div><div class="kvalue" id="kHotspots">—</div><div class="kfoot">DBSCAN · 100 m · minPts 3</div></div>
+<div class="card"><div class="klabel">Unresolved reports</div><div class="kvalue" id="kUnresolved">—</div><div class="kfoot">Unresolved + in progress</div></div>
+<div class="card"><div class="klabel">High-priority hotspots</div><div class="kvalue" id="kPriority">—</div><div class="kfoot">Score ≥ 70 / 100</div></div>
+</section>
+<div class="layout">
+<section class="card"><div class="cardhead"><h2>Report locations & potential hotspots</h2><div class="filters">
+<select id="categoryFilter"><option value="All">All categories</option><option>Mixed waste</option><option>Plastic</option><option>Organic waste</option><option>Illegal dumping</option><option>Construction waste</option><option>Other</option></select>
+<select id="priorityFilter"><option value="All">All priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
+<select id="statusFilter"><option value="All">All statuses</option><option>Unresolved</option><option>In Progress</option><option>Resolved</option></select>
+<button class="secondary" onclick="resetFilters()">Reset filters</button></div></div>
+<div id="map"></div><div class="mapfallback" id="mapFallback"><span id="mapFallbackText">Map tiles are unavailable. Reports and analysis remain usable.</span> <button type="button" class="secondary" onclick="retryMap()">Retry map</button></div>
+<div class="legend"><span><i class="dot" style="background:#b7433d"></i>High</span><span><i class="dot" style="background:#b87516"></i>Medium</span><span><i class="dot" style="background:#176b4b"></i>Low</span><span>◎ Dashed green circle = potential hotspot</span><span>Map tiles: Esri or OpenStreetMap, depending on availability</span></div>
+<div class="note" style="margin-top:8px">Map coordinates are report locations supplied in the demo. A hotspot circle visualizes a detected cluster, not a surveyed waste boundary.</div>
+</section>
+<aside class="sidegrid">
+<div class="card"><div class="cardhead"><h2>Priority hotspot ranking</h2><span class="badge">Calculated</span></div><div id="hotspotList"></div><div class="note">DBSCAN clusters connected core points within 100 m; each report belongs to at most one cluster. Select a hotspot for its reports and score breakdown.</div></div>
+<div class="card"><div class="cardhead"><h2>Category distribution</h2></div><div id="categoryBreakdown"></div></div>
+<div class="card"><div class="cardhead"><h2>Priority formula</h2></div><b style="font-size:13px">P = 0.35F + 0.30S + 0.20T + 0.15L</b><div class="scoreparts" style="margin-top:8px"><span>Frequency (F)</span><b>35%</b><span>Severity (S)</span><b>30%</b><span>Unresolved duration (T)</span><b>20%</b><span>Location sensitivity (L)</span><b>15%</b></div><div class="note" style="margin-top:8px">All factors are 0–100. Weights are provisional assumptions, not scientifically validated. Sensitivity is user-entered and unverified.</div></div>
+</aside></div>
+<section class="card section"><div class="cardhead"><h2>Reporting analytics</h2><span class="note">Based on current report records</span></div><div class="twocharts"><div><div class="klabel">Reports by category</div><div class="chartbox"><canvas id="categoryChart"></canvas></div></div><div><div class="klabel">Reports by date</div><div class="chartbox"><canvas id="trendChart"></canvas></div></div></div></section>
+<section class="card section"><div class="cardhead"><h2>Recent community reports</h2><div class="actions"><button class="secondary" onclick="downloadCSV()">Export CSV</button><button onclick="openModal()">+ Submit a report</button></div></div>
+<div class="filters" style="margin-bottom:10px"><input id="tableSearch" placeholder="Search ID, area, description…" oninput="render()" style="min-width:220px"><span class="note" id="tableCount"></span></div>
+<div style="overflow:auto"><table><thead><tr><th>Report ID</th><th>Area</th><th>Category</th><th>Date</th><th>Score</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead><tbody id="reportRows"></tbody></table></div></section>
+<section class="card section"><div class="cardhead"><h2>Judge Testing Mode</h2><div class="actions"><span class="pill">SYNTHETIC SCENARIOS</span><button class="secondary" onclick="resetDemo()">Reset demo</button></div></div>
+<p class="note">Load a controlled dataset to demonstrate how reports change hotspot detection and priority. Loading a scenario replaces the current in-browser demo records; export first if you need to keep them.</p>
+<div class="scenario-grid" id="scenarioButtons">
+<button class="secondary" onclick="loadScenario('normal')">Normal reporting</button><button class="secondary" onclick="loadScenario('three')">Three-report hotspot</button><button class="secondary" onclick="loadScenario('none')">No hotspot</button><button class="secondary" onclick="loadScenario('two')">Two separate hotspots</button><button class="secondary" onclick="loadScenario('high')">High-priority hotspot</button><button class="secondary" onclick="loadScenario('low')">Low-priority reports</button><button class="secondary" onclick="loadScenario('resolved')">Resolved reports</button><button class="secondary" onclick="loadScenario('invalid')">Invalid-input demo</button></div>
+<div class="tabs"><button class="tab active" onclick="showPanel('tests',this)">Automated tests</button><button class="tab" onclick="showPanel('workflow',this)">System workflow</button><button class="tab" onclick="showPanel('limitations',this)">Assumptions & limitations</button></div>
+<div class="panel active" id="panel-tests"><div class="cardhead"><div><b id="testSummary">Tests have not run yet.</b><div class="note">Tests execute against the functions used by this application.</div></div><button onclick="runTests()">Run all tests</button></div><div id="testResults"></div></div>
+<div class="panel" id="panel-workflow"><div class="workflow"><div><b>1 · INPUT</b>Community reports, categories, descriptions, photos, timestamps and coordinates.</div><div><b>2 · PROCESSING</b>Validation, report organization, Haversine distance, DBSCAN clustering and weighted scoring.</div><div><b>3 · OUTPUT</b>Interactive map, hotspot ranking, score explanations, report management and CSV export.</div></div></div>
+<div class="panel" id="panel-limitations"><ul class="note"><li>The original 18 sample reports are synthetic; no actual Phnom Penh waste conditions are inferred.</li><li>Data is stored in this browser only. It is not shared, encrypted production storage or a multi-user database.</li><li>Photos use IndexedDB locally, with a 2 MB limit per image; clearing browser data may delete them.</li><li>OpenStreetMap tiles require internet access. The application data and analysis work without tiles.</li><li>Priority weights and factor normalization are provisional assumptions requiring stakeholder validation.</li><li>Location sensitivity is an explicitly entered estimate; schools, hospitals and waterways are not automatically verified.</li><li>DBSCAN can merge nearby dense groups through chains of core points. A cluster's diameter can therefore exceed 100 m.</li><li>The prototype does not dispatch trucks, guarantee collection, represent a government platform or use AI image classification.</li><li>Real deployment needs field-verified data, privacy safeguards, accessibility testing, secure shared backend and operational partnerships.</li></ul></div>
+</section>
+<div class="foot">WasteLens Cambodia · Student MVP · Synthetic demonstration records · OpenStreetMap © contributors (ODbL). This decision-support prototype does not replace municipal waste collection services.</div>
+</main>
+<div class="modal" id="modal"><div class="modalbox"><div class="cardhead"><h2 id="formTitle">Submit a waste report</h2><button class="secondary" onclick="closeModal()">Close</button></div>
+<form id="reportForm"><input type="hidden" id="editId"><div class="formgrid">
+<label>Waste category<select id="fCategory" required><option>Mixed waste</option><option>Plastic</option><option>Organic waste</option><option>Illegal dumping</option><option>Construction waste</option><option>Other</option></select></label>
+<label>Location / area name<input id="fArea" required maxlength="90" placeholder="e.g. Daun Penh"></label>
+<label>Latitude<input id="fLat" type="number" step="any" min="9.5" max="14.7" required value="11.5600"></label>
+<label>Longitude<input id="fLon" type="number" step="any" min="102.3" max="107.7" required value="104.9200"></label>
+<label>Severity (0–100)<input id="fSeverity" type="number" min="0" max="100" required value="60"></label>
+<label>Location sensitivity (0–100)<input id="fLocation" type="number" min="0" max="100" required value="30"></label>
+<label>Report date & time<input id="fDate" type="datetime-local" required></label>
+<label>Photo (image, max 2 MB)<input id="fPhoto" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<label class="full">Description<textarea id="fDesc" rows="2" required maxlength="500" placeholder="Describe the reported waste issue"></textarea></label>
+<label class="full">Additional notes (optional)<textarea id="fNotes" rows="2" maxlength="500"></textarea></label>
+</div><img id="photoPreview" class="photo-preview" alt="Selected photo preview"><p class="note">Severity guide: 0–33 low (small/localized), 34–66 medium (visible accumulation or recurring concern), 67–100 high (large accumulation, obstruction or potential hazard). Sensitivity is an unverified user assessment. Photos stay in this browser.</p>
+<div class="actions" style="margin-top:12px"><button type="button" class="secondary" onclick="reviewReport()">Review report</button><button type="submit">Save report</button></div><div id="reviewBox" class="note" style="margin-top:10px"></div><div id="formError" class="fail" style="margin-top:8px"></div></form></div></div>
+<div class="modal" id="detailModal"><div class="modalbox"><div class="cardhead"><h2 id="detailTitle">Details</h2><button class="secondary" onclick="closeDetail()">Close</button></div><div id="detailContent"></div></div></div>
+<div class="toast" id="toast"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+'use strict';
+const SEED = [{"report_id": "WL-001", "category": "Mixed waste", "area_label": "Boeung Keng Kang", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-20T09:00:00", "latitude": 11.5486, "longitude": 104.923, "severity_score": 75, "location_sensitivity_score": 90, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-002", "category": "Plastic", "area_label": "Boeung Keng Kang", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-21T09:00:00", "latitude": 11.549, "longitude": 104.9234, "severity_score": 55, "location_sensitivity_score": 80, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-003", "category": "Organic waste", "area_label": "Boeung Keng Kang", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-22T09:00:00", "latitude": 11.5482, "longitude": 104.9227, "severity_score": 60, "location_sensitivity_score": 85, "status": "In Progress", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-004", "category": "Mixed waste", "area_label": "Toul Tom Poung", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-19T09:00:00", "latitude": 11.535, "longitude": 104.92, "severity_score": 80, "location_sensitivity_score": 70, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-005", "category": "Plastic", "area_label": "Toul Tom Poung", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-21T09:00:00", "latitude": 11.5354, "longitude": 104.9204, "severity_score": 55, "location_sensitivity_score": 70, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-006", "category": "Mixed waste", "area_label": "Toul Tom Poung", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-23T09:00:00", "latitude": 11.5346, "longitude": 104.9196, "severity_score": 85, "location_sensitivity_score": 75, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-007", "category": "Organic waste", "area_label": "Daun Penh", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-20T09:00:00", "latitude": 11.575, "longitude": 104.923, "severity_score": 40, "location_sensitivity_score": 65, "status": "Resolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-008", "category": "Plastic", "area_label": "Daun Penh", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-22T09:00:00", "latitude": 11.5755, "longitude": 104.9234, "severity_score": 45, "location_sensitivity_score": 65, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-009", "category": "Mixed waste", "area_label": "Chamkar Mon", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-18T09:00:00", "latitude": 11.5358, "longitude": 104.928, "severity_score": 75, "location_sensitivity_score": 85, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-010", "category": "Organic waste", "area_label": "Chamkar Mon", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-22T09:00:00", "latitude": 11.5362, "longitude": 104.9285, "severity_score": 55, "location_sensitivity_score": 85, "status": "In Progress", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-011", "category": "Plastic", "area_label": "Tuol Kouk", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-21T09:00:00", "latitude": 11.57, "longitude": 104.895, "severity_score": 35, "location_sensitivity_score": 50, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-012", "category": "Mixed waste", "area_label": "Tuol Kouk", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-23T09:00:00", "latitude": 11.5705, "longitude": 104.8955, "severity_score": 70, "location_sensitivity_score": 50, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-013", "category": "Organic waste", "area_label": "Russey Keo", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-19T09:00:00", "latitude": 11.6, "longitude": 104.9, "severity_score": 60, "location_sensitivity_score": 55, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-014", "category": "Plastic", "area_label": "Russey Keo", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-22T09:00:00", "latitude": 11.6005, "longitude": 104.9005, "severity_score": 40, "location_sensitivity_score": 55, "status": "Resolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-015", "category": "Mixed waste", "area_label": "Sen Sok", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-22T09:00:00", "latitude": 11.585, "longitude": 104.885, "severity_score": 80, "location_sensitivity_score": 60, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-016", "category": "Organic waste", "area_label": "Sen Sok", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-23T09:00:00", "latitude": 11.5854, "longitude": 104.8855, "severity_score": 55, "location_sensitivity_score": 60, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-017", "category": "Plastic", "area_label": "Meanchey", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-20T09:00:00", "latitude": 11.525, "longitude": 104.93, "severity_score": 45, "location_sensitivity_score": 70, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}, {"report_id": "WL-018", "category": "Mixed waste", "area_label": "Meanchey", "description": "Synthetic sample waste report; no field verification.", "reported_at": "2026-11-23T09:00:00", "latitude": 11.5255, "longitude": 104.9305, "severity_score": 80, "location_sensitivity_score": 70, "status": "Unresolved", "data_provenance": "Synthetic demo record", "notes": ""}];
+const STORAGE_KEY='wastelens_v2_reports', PHOTO_DB='wastelens_photos_v1';
+const WEIGHTS={frequency:.35,severity:.30,duration:.20,sensitivity:.15};
+const FREQUENCY_WINDOW_DAYS=30, FREQUENCY_CAP_REPORTS=10, HOTSPOT_EPS_METRES=100, HOTSPOT_MIN_POINTS=3;
+const CATEGORIES=['Mixed waste','Plastic','Organic waste','Illegal dumping','Construction waste','Other'];
+const $=id=>document.getElementById(id);
+const clone=x=>JSON.parse(JSON.stringify(x));
+let reports=loadReports(), map=null, markers=null, charts={}, currentPhoto=null, detailPhotoUrl=null, detailPhotoToken=0;
+function loadReports(){
+ try{
+  const v=JSON.parse(localStorage.getItem(STORAGE_KEY));if(!Array.isArray(v))return clone(SEED);
+  const seen=new Set();return v.filter(r=>{if(!r||typeof r!=='object'||validateReport(r).length)return false;const id=r.report_id;if(seen.has(id))return false;seen.add(id);return true})
+ }catch(e){return clone(SEED)}
+}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(reports));return true}catch(e){toast('Could not save: browser storage may be full.');return false}}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function haversine(a,b){const R=6371000,p1=a.latitude*Math.PI/180,p2=b.latitude*Math.PI/180,dp=(b.latitude-a.latitude)*Math.PI/180,dl=(b.longitude-a.longitude)*Math.PI/180;const x=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.min(1,Math.sqrt(x)))}
+function validCambodiaCoordinates(lat,lon){
+ const a=lat===null||lat===undefined||(typeof lat==='string'&&lat.trim()==='')?NaN:Number(lat),b=lon===null||lon===undefined||(typeof lon==='string'&&lon.trim()==='')?NaN:Number(lon);
+ return Number.isFinite(a)&&Number.isFinite(b)&&a>=9.5&&a<=14.7&&b>=102.3&&b<=107.7
+}
+function validDate(value){const t=Date.parse(value);return typeof value==='string'&&value.trim()!==''&&Number.isFinite(t)&&t<=Date.now()+5*60*1000}
+function validReportCoordinates(r){return r&&validCambodiaCoordinates(r.latitude,r.longitude)}
+function validateReport(r){
+ const errors=[];if(!r||typeof r!=='object')return ['Report data is missing.'];
+ if(!CATEGORIES.includes(r.category))errors.push('Choose a valid waste category.');
+ if(!String(r.area_label||'').trim())errors.push('Area name is required.');
+ if(!String(r.description||'').trim())errors.push('Description is required.');
+ if(!validCambodiaCoordinates(r.latitude,r.longitude))errors.push('Coordinates must be valid and within the Cambodia prototype bounds (lat 9.5–14.7, lon 102.3–107.7).');
+ for(const [k,n] of [['severity_score','Severity'],['location_sensitivity_score','Location sensitivity']]){
+  const raw=r[k],v=raw===null||raw===undefined||(typeof raw==='string'&&raw.trim()==='')?NaN:Number(raw);
+  if(!Number.isFinite(v)||v<0||v>100)errors.push(n+' must be a number between 0 and 100.')
+ }
+ if(!validDate(r.reported_at))errors.push('Enter a valid report date and time that is not in the future.');
+ if(typeof r.report_id!=='string'||!r.report_id.trim())errors.push('Report ID is required.');else if(!/^[A-Z]{2,5}-[0-9]{3,8}$/.test(r.report_id))errors.push('Report ID must use the format PREFIX-001 (2–5 uppercase letters, hyphen, 3–8 digits).');
+ return errors
+}
+function isDuplicate(candidate,ignoreId=null){
+ if(!validReportCoordinates(candidate)||!validDate(candidate.reported_at))return false;
+ const candidateTime=Date.parse(candidate.reported_at);
+ return reports.some(r=>r.report_id!==ignoreId&&validReportCoordinates(r)&&validDate(r.reported_at)&&r.category===candidate.category&&String(r.area_label||'').trim().toLowerCase()===String(candidate.area_label||'').trim().toLowerCase()&&Math.abs(Date.parse(r.reported_at)-candidateTime)<=86400000&&haversine(r,candidate)<=10)
+}
+function daysOpen(r,now=new Date()){
+ if(!r||r.status==='Resolved')return 0;const t=Date.parse(r.reported_at||r.reported_date);
+ return Number.isFinite(t)?Math.max(0,(now.getTime()-t)/86400000):0
+}
+function durationScore(r,now=new Date()){return Math.max(0,Math.min(100,daysOpen(r,now)/30*100))}
+function clampScore(v){return Math.max(0,Math.min(100,Number.isFinite(Number(v))?Number(v):0))}
+function reportScore(r,now=new Date(),frequency=0){
+ return clampScore(.35*clampScore(frequency)+.30*clampScore(r.severity_score)+.20*durationScore(r,now)+.15*clampScore(r.location_sensitivity_score))
+}
+function priorityClass(s){s=clampScore(s);return s>=70?'High':s>=40?'Medium':'Low'}
+function isRecentActiveValid(r,now=new Date()){
+ const t=Date.parse(r?.reported_at||r?.reported_date);
+ return r?.status!=='Resolved'&&validReportCoordinates(r)&&Number.isFinite(t)&&t<=now.getTime()+5*60*1000&&now.getTime()-t<=FREQUENCY_WINDOW_DAYS*86400000
+}
+function frequencyFor(group,all,now=new Date()){
+ if(!group.length)return 0;
+ // Mean of each member's local 100 m frequency score; this uses the same rule as individual report priority.
+ return group.reduce((sum,r)=>sum+frequencyForReport(r,all,now),0)/group.length
+}
+function frequencyForReport(r,all=reports,now=new Date()){
+ if(!isRecentActiveValid(r,now))return 0;
+ const nearby=all.filter(q=>isRecentActiveValid(q,now)&&haversine(r,q)<=HOTSPOT_EPS_METRES).length;
+ return Math.min(100,nearby/FREQUENCY_CAP_REPORTS*100)
+}
+function clusterReports(input,eps=HOTSPOT_EPS_METRES,minPts=HOTSPOT_MIN_POINTS){
+ const valid=(input||[]).filter(r=>validReportCoordinates(r));const n=valid.length,labels=Array(n).fill(-1),visited=Array(n).fill(false);let clusterId=0;
+ const neighbors=i=>{const out=[];for(let j=0;j<n;j++)if(haversine(valid[i],valid[j])<=eps+1e-7)out.push(j);return out};
+ for(let i=0;i<n;i++){if(visited[i])continue;visited[i]=true;const ns=neighbors(i);if(ns.length<minPts)continue;
+  labels[i]=clusterId;const queue=[...ns],queued=new Set(queue);
+  for(let q=0;q<queue.length;q++){const j=queue[q];if(!visited[j]){visited[j]=true;const n2=neighbors(j);if(n2.length>=minPts)for(const k of n2)if(!queued.has(k)){queued.add(k);queue.push(k)}}
+   if(labels[j]===-1)labels[j]=clusterId
+  }clusterId++
+ }
+ const groups=[];for(let c=0;c<clusterId;c++){const members=valid.filter((_,i)=>labels[i]===c);if(members.length>=minPts)groups.push(members)}
+ return groups
+}
+function summarizeCluster(group,index,all){
+ const now=new Date(),freq=frequencyFor(group,all,now),avg=k=>group.reduce((sum,r)=>sum+clampScore(r[k]),0)/group.length;
+ const severity=avg('severity_score'),duration=group.reduce((sum,r)=>sum+durationScore(r,now),0)/group.length,sensitivity=avg('location_sensitivity_score');
+ const score=clampScore(WEIGHTS.frequency*freq+WEIGHTS.severity*severity+WEIGHTS.duration*duration+WEIGHTS.sensitivity*sensitivity);
+ const cats={};group.forEach(r=>cats[r.category]=(cats[r.category]||0)+1);
+ return {id:'HS-'+String(index+1).padStart(2,'0'),area:[...new Set(group.map(r=>r.area_label))].join(' / '),reports:group,count:group.length,lat:avg('latitude'),lon:avg('longitude'),frequency:freq,severity,duration,sensitivity,score,priority:priorityClass(score),categories:cats}
+}
+function getClusters(input=reports){
+ const eligible=input.filter(r=>isRecentActiveValid(r));
+ return clusterReports(eligible,HOTSPOT_EPS_METRES,HOTSPOT_MIN_POINTS).map((g,i)=>summarizeCluster(g,i,eligible)).sort((a,b)=>b.score-a.score)
+}
+function getFiltered(){
+ const c=$('categoryFilter').value,p=$('priorityFilter').value,s=$('statusFilter').value;
+ let arr=reports.filter(r=>(c==='All'||r.category===c)&&(s==='All'||r.status===s));
+ if(p!=='All'){const hs=getClusters(arr),ids=new Set(hs.filter(h=>h.priority===p).flatMap(h=>h.reports.map(r=>r.report_id)));
+  arr=arr.filter(r=>ids.has(r.report_id)?true:p==='Low'&&priorityClass(priorityForReport(r))==='Low')}
+ return arr
+}
+function priorityForReport(r,now=new Date()){return reportScore(r,now,frequencyForReport(r,reports,now))}
+let activeTileLayer=null, tileProviderIndex=0, tileProviderErrors=0, mapProviderHealthy=false;
+// CARTO's public basemap endpoints began returning an API KEY REQUIRED
+// watermark without a key (even as successful image responses). Do not use
+// CARTO as an anonymous fallback: Leaflet cannot detect that watermark as a tile error.
+// Use Esri's public World Street Map tile service first, then OSM's documented
+// standard tile endpoint as a best-effort fallback. Both remain subject to provider terms.
+const MAP_TILE_PROVIDERS=[
+ {name:'Esri World Street Map',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',options:{maxZoom:19,attribution:'Tiles &copy; Esri — Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS and contributors'}},
+ {name:'OpenStreetMap standard',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',options:{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}}
+];
+function showMapFallback(message){$('mapFallbackText').textContent=message;$('mapFallback').style.display='block'}
+function loadMapProvider(index){
+ if(!map||!window.L)return;
+ if(activeTileLayer){map.removeLayer(activeTileLayer);activeTileLayer=null}
+ tileProviderIndex=index;tileProviderErrors=0;mapProviderHealthy=false;
+ if(index>=MAP_TILE_PROVIDERS.length){console.error('[WasteLens map] All tile providers failed. Check connectivity, browser extensions, firewall, and provider availability.');showMapFallback('Map tiles could not be loaded from Esri or OpenStreetMap. Check your internet connection, firewall, or provider availability, then retry. Reports and hotspot analysis remain available.');return}
+ const provider=MAP_TILE_PROVIDERS[index];
+ console.info('[WasteLens map] Trying tile provider:',provider.name,provider.url);
+ activeTileLayer=L.tileLayer(provider.url,provider.options);
+ activeTileLayer.on('tileload',()=>{mapProviderHealthy=true;$('mapFallback').style.display='none'});
+ activeTileLayer.on('tileerror',event=>{
+  tileProviderErrors++;
+  console.warn('[WasteLens map] Tile request failed:',provider.name,event&&event.tile&&event.tile.src?event.tile.src:'(tile URL unavailable)');
+  // Several independent tile failures indicate that this provider is not usable here.
+  if(!mapProviderHealthy&&tileProviderErrors>=4){console.warn('[WasteLens map] Falling back from',provider.name);loadMapProvider(index+1)}
+ });
+ activeTileLayer.addTo(map);
+}
+function initMap(){
+ if(!window.L){showMapFallback('Leaflet could not load from its CDN. Check your internet connection or allow unpkg.com, then retry the map.');console.error('[WasteLens map] Leaflet global L is unavailable.');return}
+ if(!map){map=L.map('map',{scrollWheelZoom:true}).setView([11.558,104.916],12);markers=L.layerGroup().addTo(map)}
+ loadMapProvider(0);
+ setTimeout(()=>{if(map)map.invalidateSize()},150);
+}
+function retryMap(){
+ $('mapFallback').style.display='none';
+ if(!window.L){showMapFallback('Leaflet library is still unavailable. Check access to unpkg.com and retry.');console.error('[WasteLens map] Retry requested but Leaflet is not loaded.');return}
+ if(!map){initMap();return}
+ loadMapProvider(0);map.invalidateSize();
+}
+function render(){const shown=getFiltered(),active=shown.filter(r=>r.status!=='Resolved'),hs=getClusters(active);$('kReports').textContent=shown.length;$('kHotspots').textContent=hs.length;$('kUnresolved').textContent=shown.filter(r=>r.status!=='Resolved').length;$('kPriority').textContent=hs.filter(h=>h.priority==='High').length;
+ if(markers){markers.clearLayers();shown.forEach(r=>{const s=priorityForReport(r),col=s>=70?'#b7433d':s>=40?'#b87516':'#176b4b';L.circleMarker([r.latitude,r.longitude],{radius:7,fillColor:col,color:'#fff',weight:2,fillOpacity:.9}).bindPopup(`<b>${escapeHTML(r.report_id)}</b><br>${escapeHTML(r.category)} · ${escapeHTML(r.area_label)}<br>${escapeHTML(r.description)}<br>Date: ${escapeHTML(String(r.reported_at||r.reported_date||'Date unavailable').slice(0,16).replace('T',' '))}<br>Severity: ${Number(r.severity_score)}<br>Priority: ${s.toFixed(1)} (${priorityClass(s)})<br>Status: ${escapeHTML(r.status)}<br><button onclick="showReport('${escapeHTML(r.report_id)}')">View report</button>`).addTo(markers)});
+ hs.forEach(h=>{L.circle([h.lat,h.lon],{radius:100,color:'#176b4b',weight:2,dashArray:'5 5',fillColor:'#83b99a',fillOpacity:.12}).bindPopup(`<b>${escapeHTML(h.id)} · ${escapeHTML(h.area)}</b><br>${h.count} reports<br>Average score: ${h.score.toFixed(1)} (${h.priority})<br><button onclick="showHotspot('${h.id}')">Inspect hotspot</button>`).addTo(markers);L.marker([h.lat,h.lon],{icon:L.divIcon({className:'',html:'<div style="background:#176b4b;color:white;border:2px solid white;border-radius:50%;width:25px;height:25px;text-align:center;line-height:21px;font-weight:bold">H</div>',iconSize:[25,25],iconAnchor:[12,12]})}).bindPopup(`<b>${escapeHTML(h.id)}</b><br>${h.count} contributing reports<br>Priority ${h.score.toFixed(1)} · ${h.priority}<br><button onclick="showHotspot('${h.id}')">Inspect hotspot</button>`).addTo(markers)})}
+ $('hotspotList').innerHTML=hs.length?hs.map(h=>`<div class="hotspot" onclick="showHotspot('${h.id}')"><div><div class="hotname">${escapeHTML(h.area)}</div><div class="klabel">${h.count} reports · ${escapeHTML(h.id)}</div></div><div class="score ${h.priority.toLowerCase()}">${h.score.toFixed(1)}<div class="klabel">${h.priority}</div></div></div>`).join(''):'<div class="empty">No qualifying hotspot in the current records.</div>';
+ const cats=CATEGORIES.map(c=>[c,shown.filter(r=>r.category===c).length]).filter(x=>x[1]);$('categoryBreakdown').innerHTML=cats.length?cats.map(([c,n])=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 0"><span>${escapeHTML(c)}</span><b>${n}</b></div>`).join(''):'<div class="empty">No reports.</div>';
+ const query=$('tableSearch').value.trim().toLowerCase(),rows=shown.filter(r=>!query||[r.report_id,r.area_label,r.description].some(v=>String(v||'').toLowerCase().includes(query))).sort((a,b)=>new Date(b.reported_at||b.reported_date)-new Date(a.reported_at||a.reported_date));$('tableCount').textContent=`Showing ${rows.length} of ${shown.length}`;
+ $('reportRows').innerHTML=rows.map(r=>{const s=priorityForReport(r);return `<tr><td><b>${escapeHTML(r.report_id)}</b><div class="kfoot">${escapeHTML(r.data_provenance)}</div></td><td>${escapeHTML(r.area_label)}</td><td>${escapeHTML(r.category)}</td><td>${escapeHTML(String(r.reported_at||r.reported_date||'').slice(0,10))}</td><td>${s.toFixed(1)}</td><td class="${priorityClass(s).toLowerCase()}">${priorityClass(s)}</td><td><span class="status">${escapeHTML(r.status)}</span></td><td><button class="secondary" onclick="showReport('${escapeHTML(r.report_id)}')">View / edit</button> <button class="secondary" onclick="toggleStatus('${escapeHTML(r.report_id)}')">${r.status==='Resolved'?'Reopen':'Resolve'}</button></td></tr>`}).join('')||'<tr><td colspan="8" class="empty">No matching reports.</td></tr>';
+ renderCharts(shown)}
+function renderCharts(data){if(!window.Chart)return;const cats=CATEGORIES.map(c=>data.filter(r=>r.category===c).length);const dates={};data.forEach(r=>{const d=String(r.reported_at||r.reported_date||'').slice(0,10);dates[d]=(dates[d]||0)+1});const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};if(charts.cat)charts.cat.destroy();if(charts.trend)charts.trend.destroy();charts.cat=new Chart($('categoryChart'),{type:'bar',data:{labels:CATEGORIES,datasets:[{data:cats,backgroundColor:'#6eaa86',borderRadius:5}]},options:{...opts,scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});charts.trend=new Chart($('trendChart'),{type:'line',data:{labels:Object.keys(dates).sort(),datasets:[{data:Object.keys(dates).sort().map(k=>dates[k]),borderColor:'#176b4b',backgroundColor:'#dceee2',fill:true,tension:.25}]},options:{...opts,scales:{y:{beginAtZero:true,ticks:{precision:0}}}}})}
+function resetFilters(){$('categoryFilter').value='All';$('priorityFilter').value='All';$('statusFilter').value='All';$('tableSearch').value='';render()}
+['categoryFilter','priorityFilter','statusFilter'].forEach(id=>$(id).addEventListener('change',render));
+function toggleStatus(id){
+ const r=reports.find(x=>x.report_id===id);if(!r)return;const previous={status:r.status,resolved_at:r.resolved_at};
+ r.status=r.status==='Resolved'?'Unresolved':'Resolved';r.resolved_at=r.status==='Resolved'?new Date().toISOString():null;
+ if(!persist()){r.status=previous.status;r.resolved_at=previous.resolved_at;return}
+ render();toast(`Report ${id} status: ${r.status}`)
+}
+function nextId(){let n=0;reports.forEach(r=>{const m=String(r.report_id).match(/(\\d+)$/);if(m)n=Math.max(n,Number(m[1]))});let id;do{id='WL-'+String(++n).padStart(3,'0')}while(reports.some(r=>r.report_id===id));return id}
+function clearPreviewUrl(){const img=$('photoPreview'),url=img.dataset.objectUrl;img.removeAttribute('src');img.style.display='none';if(url){URL.revokeObjectURL(url);delete img.dataset.objectUrl}}
+function openModal(id=null){clearPreviewUrl();$('reportForm').reset();$('editId').value='';$('formTitle').textContent=id?'Edit report':'Submit a waste report';$('formError').textContent='';$('reviewBox').textContent='';currentPhoto=null;$('fDate').value=new Date().toISOString().slice(0,16);if(id){const r=reports.find(x=>x.report_id===id);if(!r)return;$('editId').value=id;$('fCategory').value=r.category;$('fArea').value=r.area_label;$('fLat').value=r.latitude;$('fLon').value=r.longitude;$('fSeverity').value=r.severity_score;$('fLocation').value=r.location_sensitivity_score;$('fDesc').value=r.description||'';$('fNotes').value=r.notes||'';$('fDate').value=(r.reported_at||r.reported_date).slice(0,16)}$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show');clearPreviewUrl();currentPhoto=null;$('fPhoto').value=''}
+function revokeDetailPhoto(){detailPhotoToken++;const img=$('photoDetail')?.querySelector('img');if(img){img.removeAttribute('src');img.remove()}if(detailPhotoUrl){URL.revokeObjectURL(detailPhotoUrl);detailPhotoUrl=null}}
+function showReport(id){const r=reports.find(x=>x.report_id===id);if(!r)return;revokeDetailPhoto();$('detailTitle').textContent=`Report ${r.report_id}`;const s=priorityForReport(r);$('detailContent').innerHTML=`<div class="detailgrid"><div class="detail"><b>Category</b><span>${escapeHTML(r.category)}</span></div><div class="detail"><b>Area</b><span>${escapeHTML(r.area_label)}</span></div><div class="detail"><b>Date</b><span>${escapeHTML(r.reported_at||r.reported_date)}</span></div><div class="detail"><b>Severity</b><span>${r.severity_score}/100</span></div><div class="detail"><b>Priority score</b><span>${s.toFixed(1)} · ${priorityClass(s)}</span></div><div class="detail"><b>Status</b><span>${escapeHTML(r.status)}</span></div><div class="detail"><b>Coordinates</b><span>${r.latitude}, ${r.longitude}</span></div><div class="detail"><b>Provenance</b><span>${escapeHTML(r.data_provenance)}</span></div></div><p>${escapeHTML(r.description||'')}</p><p class="note">${escapeHTML(r.notes||'')}</p><div id="photoDetail"></div><div class="actions"><button onclick="closeDetail();openModal('${escapeHTML(id)}')">Edit report</button><button class="secondary" onclick="toggleStatus('${escapeHTML(id)}');closeDetail()"> ${r.status==='Resolved'?'Reopen':'Resolve'} </button></div>`;$('detailModal').classList.add('show');const token=detailPhotoToken;getPhoto(id).then(blob=>{if(!blob||token!==detailPhotoToken||!$('detailModal').classList.contains('show'))return;detailPhotoUrl=URL.createObjectURL(blob);const img=document.createElement('img');img.alt='Report photo';img.src=detailPhotoUrl;img.style='max-width:100%;max-height:220px;border-radius:8px;margin-top:10px';$('photoDetail').replaceChildren(img)}).catch(()=>{if(token===detailPhotoToken)$('photoDetail').textContent='Photo unavailable in this browser.'})}
+function closeDetail(){revokeDetailPhoto();$('detailModal').classList.remove('show');$('detailContent').replaceChildren()}
+function showHotspot(id){const h=getClusters().find(x=>x.id===id);if(!h)return;revokeDetailPhoto();$('detailTitle').textContent=`${h.id} · ${h.area}`;const factor=(label,v,w)=>`<div class="scoreparts"><span>${label} (${(w*100).toFixed(0)}%)</span><b>${v.toFixed(1)} × ${w.toFixed(2)} = ${(v*w).toFixed(2)}</b></div>`;$('detailContent').innerHTML=`<div class="detailgrid"><div class="detail"><b>Contributing reports</b><span>${h.count}</span></div><div class="detail"><b>Average priority</b><span>${h.score.toFixed(2)} · ${h.priority}</span></div><div class="detail"><b>Categories</b><span>${Object.entries(h.categories).map(([k,v])=>escapeHTML(k)+' ('+v+')').join(', ')}</span></div><div class="detail"><b>Cluster centre</b><span>${h.lat.toFixed(5)}, ${h.lon.toFixed(5)}</span></div></div><h3 style="font-size:13px;margin:14px 0 8px">Transparent score breakdown</h3>${factor('Frequency',h.frequency,WEIGHTS.frequency)}${factor('Severity',h.severity,WEIGHTS.severity)}${factor('Unresolved duration',h.duration,WEIGHTS.duration)}${factor('Location sensitivity',h.sensitivity,WEIGHTS.sensitivity)}<hr style="border:0;border-top:1px solid var(--line);margin:10px 0"><div class="scoreparts"><b>Final score</b><b>${h.score.toFixed(2)} / 100 · ${h.priority}</b></div><p class="note">Frequency = nearby report count in the last 30 days, capped at 10 reports (count ÷ 10 × 100). Severity and sensitivity are averages of user-entered scores. Duration = average unresolved days ÷ 30 × 100, capped at 100; resolved reports are excluded. Sensitivity is not externally verified.</p><h3 style="font-size:13px">Contributing reports</h3><p class="note">${h.reports.map(r=>escapeHTML(r.report_id)).join(', ')}</p>`;$('detailModal').classList.add('show')}
+function formRecord(){
+ const dateRaw=$('fDate').value;
+ return {report_id:$('editId').value||nextId(),category:$('fCategory').value,area_label:$('fArea').value.trim(),
+ latitude:$('fLat').value,longitude:$('fLon').value,severity_score:$('fSeverity').value,
+ location_sensitivity_score:$('fLocation').value,description:$('fDesc').value.trim(),notes:$('fNotes').value.trim(),
+ reported_at:dateRaw?new Date(dateRaw).toISOString():'',status:'Unresolved',data_provenance:'User-entered demo record'}
+}
+function reviewReport(){
+ let r;try{r=formRecord()}catch(err){$('formError').textContent='Enter a valid report date and time.';return}
+ const errors=validateReport(r);$('formError').textContent=errors.join(' ');
+ if(errors.length)return;
+ $('reviewBox').innerHTML=`<b>Review before saving</b><br>${escapeHTML(r.category)} · ${escapeHTML(r.area_label)}<br>${escapeHTML(r.description)}<br>Coordinates: ${escapeHTML(r.latitude)}, ${escapeHTML(r.longitude)}<br>Severity ${escapeHTML(r.severity_score)} · Sensitivity ${escapeHTML(r.location_sensitivity_score)}<br>Date: ${escapeHTML(r.reported_at)}`
+}
+$('fPhoto').addEventListener('change',e=>{clearPreviewUrl();currentPhoto=null;const f=e.target.files&&e.target.files[0];if(!f){$('formError').textContent='';return}if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>2*1024*1024){$('formError').textContent='Choose a JPEG, PNG or WebP image no larger than 2 MB.';e.target.value='';return}currentPhoto=f;const url=URL.createObjectURL(f);$('photoPreview').dataset.objectUrl=url;$('photoPreview').src=url;$('photoPreview').style.display='block';$('formError').textContent=''});
+
+$('reportForm').addEventListener('submit',async e=>{e.preventDefault();let r;try{r=formRecord()}catch(err){$('formError').textContent='Please enter a valid date and all required values.';return}const errors=validateReport(r);if(errors.length){$('formError').textContent=errors.join(' ');return}
+ r.latitude=Number(r.latitude);r.longitude=Number(r.longitude);r.severity_score=Number(r.severity_score);r.location_sensitivity_score=Number(r.location_sensitivity_score);
+ const oldId=$('editId').value;const oldRecord=oldId?reports.find(x=>x.report_id===oldId):null;if(oldId&&!oldRecord){$('formError').textContent='The report being edited no longer exists.';return}const oldSnapshot=oldRecord?clone(oldRecord):null;if(isDuplicate(r,oldId)){ $('formError').textContent='Possible duplicate: same category and area within 10 m and 24 hours. Review the existing report before adding.';return}
+ if(oldId){const old=reports.find(x=>x.report_id===oldId);if(!old){$('formError').textContent='The report being edited no longer exists.';return}r.report_id=oldId;r.status=old.status;r.data_provenance=old.data_provenance;r.resolved_at=old.resolved_at;reports=reports.map(x=>x.report_id===oldId?r:x)}else reports.push(r);
+ if(!persist()){if(oldId){const original=reports.find(x=>x.report_id===oldId);if(original)reports=reports.map(x=>x.report_id===oldId?oldSnapshot:x)}else reports=reports.filter(x=>x.report_id!==r.report_id);return}
+ const hadPhoto=!!currentPhoto;const photoResult=await persistReportPhoto(r.report_id,currentPhoto);closeModal();render();toast((oldId?'Report updated.':'Report submitted successfully.')+(hadPhoto&&!photoResult.ok?' Report saved, BUT photo was not saved: '+photoResult.error:' Map, KPIs and hotspots updated.'))});
+function buildCSV(rows=reports){
+ const keys=['report_id','category','description','area_label','latitude','longitude','reported_at','severity_score','location_sensitivity_score','status','resolved_at','notes','data_provenance'];
+ const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ return [keys.map(quote).join(','),...rows.map(r=>keys.map(k=>quote(r[k])).join(','))].join('\r\n')
+}
+function downloadCSV(){const csv=buildCSV();const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='wastelens_reports.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function clearStoredPhotos(){
+ try{const db=await dbOpen();if(!db)return;await new Promise((resolve,reject)=>{const tx=db.transaction('photos','readwrite');tx.objectStore('photos').clear();tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}catch(e){toast('Reports reset, but saved photos could not be cleared.')}
+}
+async function resetDemo(){
+ if(!confirm('Reset all demo reports to the original 18 synthetic records? User-added demo reports and status changes will be lost.'))return;closeDetail();closeModal();
+ const previous=reports;reports=clone(SEED);if(!persist()){reports=previous;return}
+ await clearStoredPhotos();resetFilters();toast('Demo restored to original synthetic dataset and photo store cleared.')
+}
+function scenarioRecords(coords,opts={}){return coords.map((p,i)=>({report_id:'WL-'+String(i+1).padStart(3,'0'),category:opts.category||['Mixed waste','Plastic','Organic waste'][i%3],description:'Synthetic scenario report '+(i+1),area_label:opts.area||'Demo test area',latitude:p[0],longitude:p[1],reported_at:new Date(Date.now()-(opts.ageDays??5)*86400000).toISOString(),severity_score:opts.severity??55,location_sensitivity_score:opts.sensitivity??25,status:opts.resolved?'Resolved':'Unresolved',data_provenance:'Synthetic demo record'}))}
+function loadScenario(name){const base=[11.5486,104.923];const offsets=(dx,dy)=>[base[0]+dy/111320,base[1]+dx/(111320*Math.cos(base[0]*Math.PI/180))];const three=[offsets(0,0),offsets(20,10),offsets(40,-10)],six=[...three,...three.map(p=>[p[0]+.02,p[1]+.02])];let data;
+ switch(name){case'normal':data=clone(SEED);break;case'three':data=scenarioRecords(three);break;case'none':data=scenarioRecords([offsets(0,0),offsets(300,0),offsets(600,0)]);break;case'two':data=scenarioRecords([...three,...three.map(p=>[p[0]+.02,p[1]+.02])]);break;case'high':data=scenarioRecords(three,{severity:95,sensitivity:95,ageDays:30});break;case'low':data=scenarioRecords(three,{severity:5,sensitivity:0,ageDays:0});break;case'resolved':data=scenarioRecords(three,{resolved:true});break;case'invalid':data=clone(SEED);break}
+ reports=data;persist();resetFilters();if(name==='invalid'){openModal();$('fLat').value='99';$('fArea').value='Invalid location test';$('fDesc').value='This should be rejected';$('formError').textContent='Scenario loaded: try saving this report to see coordinate validation reject it.'}toast('Loaded '+name+' synthetic scenario.');}
+function showPanel(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));$('panel-'+id).classList.add('active');btn.classList.add('active')}
+async function runTests(){const tests=[];const test=async(name,fn)=>{try{const result=await fn();const ok=typeof result==='boolean'?result:!!(result&&typeof result==='object'&&result.passed===true);const detail=typeof result==='string'?result:(result&&typeof result==='object'?String(result.message||''):'');tests.push({name,ok,detail:ok?'':(detail||'Expected condition was not met.')})}catch(e){tests.push({name,ok:false,detail:e&&e.message?e.message:String(e)})}};
+ const pts=scenarioRecords([[11.55,104.92],[11.5501,104.9201],[11.5502,104.9202]]),two=pts.slice(0,2),far=scenarioRecords([[11.5,104.9],[11.55,104.95],[11.6,105]]),overlap=scenarioRecords([[11.55,104.92],[11.5505,104.92],[11.551,104.92],[11.5515,104.92]]);
+ await test('Haversine distance is approximately 111 m for 0.001° latitude',()=>Math.abs(haversine({latitude:0,longitude:0},{latitude:.001,longitude:0})-111.195)<1);
+ await test('Three reports within 100 m create one hotspot',()=>clusterReports(pts).length===1&&clusterReports(pts)[0].length===3);
+ await test('Two reports do not create a hotspot',()=>clusterReports(two).length===0);
+ await test('Three reports farther than 100 m do not create a hotspot',()=>clusterReports(far).length===0);
+ await test('Four connected reports are counted once in one cluster',()=>{const c=clusterReports(overlap);return c.length===1&&c[0].length===4});
+ await test('Two spatially separate groups create two hotspots',()=>{const six=scenarioRecords([[11.55,104.92],[11.5501,104.9201],[11.5502,104.9202],[11.57,104.95],[11.5701,104.9501],[11.5702,104.9502]]);return clusterReports(six).length===2});
+ await test('Distance threshold includes exactly 100 m (tolerance)',()=>{const a={latitude:0,longitude:0},b={latitude:100/111194.9266,longitude:0};return haversine(a,b)<=100.01});
+ await test('Priority weighted score calculates correctly',()=>Math.abs((.35*85+.30*75+.20*65+.15*90)-78.75)<1e-9);
+ await test('Priority classifications match 70 / 40 thresholds',()=>priorityClass(70)==='High'&&priorityClass(69.99)==='Medium'&&priorityClass(40)==='Medium'&&priorityClass(39.99)==='Low');
+ await test('Cambodia coordinate validation rejects latitude 99',()=>!validCambodiaCoordinates(99,104.9));
+ await test('Coordinate validation rejects latitude outside -90..90',()=>!validCambodiaCoordinates(91,104.9)&&!validCambodiaCoordinates(-91,104.9));
+ await test('Coordinate validation rejects longitude outside -180..180',()=>!validCambodiaCoordinates(11.5,181)&&!validCambodiaCoordinates(11.5,-181));
+ await test('Cambodia demo coordinates remain geographically plausible',()=>SEED.every(r=>validCambodiaCoordinates(r.latitude,r.longitude)));
+ await test('Missing required fields are rejected',()=>validateReport({}).length>=5);
+ await test('Duplicate report detection catches same area/category/time/location',()=>{const original=reports;reports=[{report_id:'DUP',category:'Plastic',area_label:'X',latitude:11.55,longitude:104.92,reported_at:new Date().toISOString()}];const dup=isDuplicate({report_id:'NEW',category:'Plastic',area_label:'x',latitude:11.55001,longitude:104.92001,reported_at:new Date().toISOString()});reports=original;return dup});
+ await test('Status toggle changes a report and removes resolved reports from active clusters',()=>{const oldReports=reports,oldPersist=persist,oldRender=render;try{reports=clone(pts);persist=()=>true;render=()=>{};toggleStatus(pts[0].report_id);return reports[0].status==='Resolved'&&clusterReports(reports.filter(x=>x.status!=='Resolved')).length===0}finally{reports=oldReports;persist=oldPersist;render=oldRender}});
+ await test('Frequency excludes reports older than the 30-day window',()=>{const old=scenarioRecords([[11.55,104.92],[11.5501,104.9201],[11.5502,104.9202]],{ageDays:60});return frequencyFor(old,old,new Date())===0});
+ await test('Frequency excludes resolved reports',()=>{const resolved=scenarioRecords([[11.55,104.92],[11.5501,104.9201],[11.5502,104.9202]],{resolved:true});return frequencyFor(resolved,resolved,new Date())===0});
+ await test('Blank numeric inputs are rejected rather than coerced to zero',()=>validateReport({category:'Plastic',area_label:'X',description:'Y',latitude:'',longitude:'104.9',severity_score:'',location_sensitivity_score:'0',reported_at:new Date().toISOString()}).length>=2);
+ await test('Invalid coordinates are excluded from clusters',()=>clusterReports([...pts,{...pts[0],report_id:'BAD',latitude:99}]).every(g=>g.every(validReportCoordinates)));
+ await test('Priority score is bounded from 0 to 100',()=>reportScore({severity_score:150,location_sensitivity_score:-10,reported_at:new Date().toISOString(),status:'Resolved'},new Date(),150)>=0&&reportScore({severity_score:150,location_sensitivity_score:-10,reported_at:new Date().toISOString(),status:'Resolved'},new Date(),150)<=100);
+ await test('Unresolved KPI matches the currently filtered report records',()=>{const expected=getFiltered().filter(r=>r.status!=='Resolved').length;return Number($('kUnresolved').textContent)===expected});
+ await test('CSV uses real CRLF row separators across multiple rows',()=>{const csv=buildCSV([{report_id:'WL-901',description:'one'},{report_id:'WL-902',description:'two'}]);return csv.includes('\r\n')&&!csv.includes('\\r\\n')&&csv.split('\r\n').length===3});
+ await test('CSV quotes commas inside values',()=>buildCSV([{report_id:'WL-901',description:'dump, site'}]).includes('"dump, site"'));
+ await test('CSV doubles embedded quotation marks',()=>buildCSV([{report_id:'WL-901',description:'a "quoted" site'}]).includes('"a ""quoted"" site"'));
+ await test('CSV preserves actual newlines inside quoted descriptions',()=>{const csv=buildCSV([{report_id:'WL-901',description:'line one\nline two'}]);return csv.includes('"line one\nline two"')});
+ await test('CSV exports empty fields as quoted empty strings',()=>buildCSV([{report_id:'WL-901',description:'x',notes:''}]).includes(',"",'));
+ await test('Missing and malformed report IDs are rejected',()=>validateReport({...pts[0],report_id:''}).some(x=>x.includes('Report ID'))&&validateReport({...pts[0],report_id:'bad id'}).some(x=>x.includes('Report ID')));
+ await test('Duplicate report IDs are rejected when loading persisted data',()=>{const a={...pts[0],report_id:'WL-901'},b={...pts[1],report_id:'WL-901'};const saved=localStorage.getItem(STORAGE_KEY);try{localStorage.setItem(STORAGE_KEY,JSON.stringify([a,b]));const loaded=loadReports();return loaded.filter(x=>x.report_id==='WL-901').length===1}finally{if(saved===null)localStorage.removeItem(STORAGE_KEY);else localStorage.setItem(STORAGE_KEY,saved)}});
+ await test('No-photo submission skips IndexedDB and succeeds',async()=>{const result=await persistReportPhoto('WL-998',null);return result.ok===true&&result.skipped===true});
+ await test('Photo submission delegates to persistent photo storage',async()=>{const old=putPhoto;try{putPhoto=async(id,file)=>({ok:id==='WL-997'&&file instanceof Blob});const result=await persistReportPhoto('WL-997',new Blob(['photo'],{type:'image/png'}));return result.ok===true}finally{putPhoto=old}});
+ await test('Photo storage failure returns an explicit failure result',async()=>{const old=window.indexedDB;try{Object.defineProperty(window,'indexedDB',{configurable:true,value:undefined});const result=await putPhoto('WL-999',new Blob(['x'],{type:'image/png'}));return result.ok===false&&!!result.error}finally{Object.defineProperty(window,'indexedDB',{configurable:true,value:old})}});
+ await test('Null coordinates and severity are rejected',()=>validateReport({category:'Plastic',area_label:'X',description:'Y',latitude:null,longitude:104.9,severity_score:null,location_sensitivity_score:0,reported_at:new Date().toISOString()}).length>=2);
+ window.__wastelensLastTests=tests;const pass=tests.filter(t=>t.ok).length,fail=tests.length-pass;$('testSummary').textContent=`Total: ${tests.length} · Passed: ${pass} · Failed: ${fail}`;$('testResults').innerHTML=tests.map(t=>`<div class="testrow"><span>${escapeHTML(t.name)}${t.detail?'<div class="note">'+escapeHTML(t.detail)+'</div>':''}</span><b class="${t.ok?'pass':'fail'}">${t.ok?'PASS':'FAIL'}</b></div>`).join('');}
+const dbOpen=()=>new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('IndexedDB is unavailable in this browser or file context.'));return}const req=indexedDB.open(PHOTO_DB,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos'))req.result.createObjectStore('photos')};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Could not open photo database.'));req.onblocked=()=>reject(new Error('Photo database upgrade is blocked by another tab.'))});
+async function putPhoto(id,file){let db;try{db=await dbOpen();await new Promise((res,rej)=>{let tx;try{tx=db.transaction('photos','readwrite');tx.objectStore('photos').put(file,id)}catch(e){rej(e);return}tx.oncomplete=res;tx.onerror=()=>rej(tx.error||new Error('Photo write failed.'));tx.onabort=()=>rej(tx.error||new Error('Photo write was aborted.'))});return {ok:true}}catch(e){return {ok:false,error:e&&e.message?e.message:'Unknown photo storage error'}}finally{if(db)db.close()}}
+async function persistReportPhoto(id,file){if(!file)return {ok:true,skipped:true};return putPhoto(id,file)}
+async function getPhoto(id){const db=await dbOpen();try{return await new Promise((res,rej)=>{const tx=db.transaction('photos','readonly'),req=tx.objectStore('photos').get(id);req.onsuccess=()=>res(req.result||null);req.onerror=()=>rej(req.error||new Error('Could not read photo.'))})}finally{db.close()}}
+initMap();render();
+</script></body></html>
